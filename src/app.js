@@ -9,6 +9,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/hacker.php', (req, res) => {
+  console.log('XSS Attack successful', req)
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
