@@ -18,8 +18,12 @@
   <body>
 
 <div ng-controller="Ctrl">
-  <p>{{ 'HEADLINE' | translate }}</p>
-  <p translate="{{a}}" translate-values="{username: '<span style=\'color:red;\'>HACKED</span>'}"></p>
+  <button on-click="copyToClipboard()">Copy Example To Clipboard</button>
+  <form>
+    <label>Input</label>
+    <input ng-model="input" type="text"/>
+  </form>
+  <p translate="{{input}}"></p>
 </div>
 
 
