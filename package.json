@@ -1,0 +1,11 @@
+{
+  "name": "angular-translate-key-xss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "patched-translate.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
