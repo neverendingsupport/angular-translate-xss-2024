@@ -1,28 +1,77 @@
 <!doctype html>
-<html ng-app="myApp_sanitize">
-  <head>
-    <script src="https://cdn.rawgit.com/SlexAxton/messageformat.js/0.2.2/messageformat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular-animate.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular-cookies.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular-sanitize.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.19.1/angular-translate.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.19.1/angular-translate-interpolation-messageformat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.19.1/angular-translate-storage-cookie.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.19.1/angular-translate-storage-local.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-url/2.19.1/angular-translate-loader-url.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.19.1/angular-translate-loader-static-files.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-handler-log/2.19.1/angular-translate-handler-log.js"></script>
-    <script src="script.js"></script>
-  </head>
-  <body>
+<html ng-app="myApp_sanitize" ng-controller="Ctrl">
+   <head>
+      <script src="https://cdn.rawgit.com/SlexAxton/messageformat.js/0.2.2/messageformat.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular-animate.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular-cookies.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular-sanitize.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.19.1/angular-translate.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-interpolation-messageformat/2.19.1/angular-translate-interpolation-messageformat.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-cookie/2.19.1/angular-translate-storage-cookie.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-storage-local/2.19.1/angular-translate-storage-local.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-url/2.19.1/angular-translate-loader-url.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.19.1/angular-translate-loader-static-files.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-handler-log/2.19.1/angular-translate-handler-log.js"></script>
+      <script src="script.js"></script>
+      <title>Angular Translate vulnerability: `translate key` XSS</title>
+      <meta name="author" content="https://www.herodevs.com/" />
+      <meta name="description" content="A minimal reproduction of an angular-translate XSS vulnerability related to key sanitization."/>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+   </head>
+   <body>
+      <div>
+         <h1>
+            <small>Reproduction of Angular Translate vulnerability:</small><br />
+            <code>Key Sanitization</code> XSS
+         </h1>
+         <section class="vulnerability-info-section">
+         <h2>vulnerability Info</h2>
+         <table class="vulnerability-info-table">
+            <tr>
+               <th>Type:</th>
+               <td><a href="https://owasp.org/www-community/attacks/xss">XSS</a></td>
+            </tr>
+            <tr>
+               <th>Affected versions:</th>
+               <td>>=v2.19.1</td>
+            </tr>
+            <tr>
+               <th>Fixed in version:</th>
+               <td><a href="https://support.herodevs.com/hc/en-us/articles/24409547436557-Angular-Translate-NES">Angular Translate NES</a>v2.20.1</td>
+            </tr>
+            <tr>
+               <th>Description:</th>
+               <td>
+                  A regular expression used by the <a href="https://github.com/angular-translate/angular-translate/blob/master/src/directive/translate.js"><code>translate</code></a> directive to apply translations is vulnerable to xss attacks.
+                  With a large carefully-crafted input, this can result in the injection of malicious scripts into application code, also known as a <a href="https://owasp.org/www-community/attacks/xss">XSS attack</a>.
+                  Such malicious code can be used to exfiltrate sensitive data to remote servers.
+               </td>
+            </tr>
+         </table>
+         </section class="repro-instructions-section">
+         <h2>Reproduction instructions</h2>
+         <p>
+            The app below demonstrates the issue by constructing malicious code entered by a user into an input field.
+            The app contains a text input. It is possible to pass malicious html into this input that will execute
+            arbitrary JavaScript code in the browser. This reproduction automatically fills in the input with an example
+            of such malicious code. Simply hover over the sections that says 'MOUSE OVER ME!' and note the exfiltrated
+            data.
+          </p>
+          <p>
+            The malicious code is run, un-sanitized, through the <code>translate</code> directive. Because the 
+            malicious code is un-sanitized, it is attached to the dom, executed, and exfiltrates mocked sensitive 
+            information.
+          </p>
 
-<div ng-controller="Ctrl">
-  <button ng-click="simulateXssAttack()">Simulate XSS Attack</button>
-  <input ng-model="input" type="text"/>
-  <p>Input: <span translate="{{input}}"></span></p>
-</div>
 
-
-  </body>
+         <section class="repro-content-section">
+            <h2>Reproduction</h2>
+            <label for="userInput"><strong>Input Malicious Code Here:</strong></label>
+            <input ng-model="input" type="text" name="userInput"/>
+            <p><span translate="{{input}}"></span></p>
+         </section>
+      </div>
+   </body>
 </html>
