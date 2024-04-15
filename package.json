@@ -4,8 +4,17 @@
   "description": "",
   "main": "patched-translate.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve:app": "http-server",
+    "start": "node src/app.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "stackblitz": {
+    "startCommand": "npm start"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-server": "^14.1.1"
+  }
 }
