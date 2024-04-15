@@ -44,7 +44,7 @@
             <tr>
                <th>Description:</th>
                <td>
-                  Unsanitized keys used the <a href="https://github.com/angular-translate/angular-translate/blob/master/src/directive/translate.js"><code>translate</code></a> directive to apply translations is vulnerable to xss attacks.
+                  Unsanitized keys used by the <a href="https://github.com/angular-translate/angular-translate/blob/master/src/directive/translate.js"><code>translate</code></a> directive to apply translations is vulnerable to xss attacks.
                   With a large carefully-crafted input, this can result in the injection of malicious scripts into application code, also known as a <a href="https://owasp.org/www-community/attacks/xss">XSS attack</a>.
                   Such malicious code can be used to exfiltrate sensitive data to remote servers.
                </td>
