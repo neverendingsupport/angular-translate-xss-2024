@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/hacker.php', (req, res) => {
-  console.log('XSS Attack successful', req)
+  console.log(Date.now() + 'XSS Attack successful', req.query)
   return res.send(200, { message: `${Date.now()} Data Exfiltrated: ${ JSON.stringify(req.query) }` });
 });
 
